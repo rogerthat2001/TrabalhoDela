@@ -1,0 +1,81 @@
+class AutomatoFinito:
+ def __init__(self, estado_inicial, estados_finais, transicoes):
+ self.estado_inicial = estado_inicial
+ self.estados_finais = estados_finais
+ self.transicoes = transicoes
+ def processar_palavra(self, palavra):
+ estado_atual = self.estado_inicial
+ for simbolo in palavra:
+ if (estado_atual, simbolo) in self.transicoes:
+ estado_atual = self.transicoes[(estado_atual, simbolo)]
+ else:
+ return False
+ return estado_atual in self.estados_finais
+entrada_automato = input().split('\n')
+estado_inicial = int(entrada_automato[0])
+estados_finais = set(map(int, entrada_automato[1].split(',')))
+transicoes = {}
+for transicao in entrada_automato[2:]:
+ estado_origem, simbolo, estado_destino = transicao[1:-1].split('|')
+ estado_origem = int(estado_origem)
+ estado_destino = int(estado_destino)
+ transicoes[(estado_origem, simbolo)] = estado_destino
+automato = AutomatoFinito(estado_inicial, estados_finais, transicoes)
+palavra = input().strip()
+if automato.processar_palavra(palavra):
+ print("Palavra aceita")
+else:
+ print("Palavra rejeitada")
+Para utilizar o simulador, o usuário deve fornecer a especificação do autômato finito na
+entrada padrão no seguinte formato:
+A primeira linha contém o estado inicial.
+A segunda linha contém uma lista separada por vírgulas dos estados finais.
+As linhas seguintes contêm as transições do autômato, uma por linha. Cada transição é
+representada no formato (estado_origem | simbolo | estado_destino), onde estado_origem é
+o estado de origem da transição, simbolo é o símbolo que aciona a transição e estado_destino
+é o estado de destino da transição.
+Em seguida, o usuário deve fornecer a palavra de entrada para o autômato na entrada padrão.
+O simulador processará a palavra de entrada no autômato e informará se a palavra foi aceita
+ou rejeitada.
+Com base nos requisitos fornecidos, podemos modificar o código anterior para ler a entrada e
+saída do arquivo em vez da entrada e saída padrão. Além disso, podemos processar múltiplas
+palavras de entrada a partir de um arquivo de entrada.
+Aqui está um exemplo de código Python modificado para ler a entrada e saída do arquivo:
+class AutomatoFinito:
+ def __init__(self, estado_inicial, estados_finais, transicoes):
+ self.estado_inicial = estado_inicial
+ self.estados_finais = estados_finais
+ self.transicoes = transicoes
+ def processar_palavra(self, palavra):
+ estado_atual = self.estado_inicial
+ for simbolo in palavra:
+ if (estado_atual, simbolo) in self.transicoes:
+ estado_atual = self.transicoes[(estado_atual, simbolo)]
+ else:
+ return False
+ return estado_atual in self.estados_finais
+with open("entrada.txt", "r") as entrada, open("saida.txt", "w") as saida:
+ entrada_automato = entrada.readline().strip().split('\n')
+ estado_inicial = int(entrada_automato[0])
+ estados_finais = set(map(int, entrada_automato[1].split(',')))
+ transicoes = {}
+ for transicao in entrada_automato[2:]:
+ estado_origem, simbolo, estado_destino = transicao[1:-1].split('|')
+ estado_origem = int(estado_origem)
+ estado_destino = int(estado_destino)
+ transicoes[(estado_origem, simbolo)] = estado_destino
+ automato = AutomatoFinito(estado_inicial, estados_finais, transicoes)
+ for palavra in entrada:
+ palavra = palavra.strip()
+ if automato.processar_palavra(palavra):
+ saida.write("1\n")
+ else:
+ saida.write("0\n")
+Neste exemplo, assumimos que a entrada está no arquivo "entrada.txt" e que a saída deve ser
+gravada no arquivo "saida.txt". Cada palavra de entrada deve estar em uma linha separada.
+Ao executar o código, o simulador lerá a especificação do autômato finito a partir da primeira
+linha do arquivo de entrada, processará cada palavra de entrada sucessivamente e gravará a
+resposta correspondente (1 para palavra aceita e 0 para palavra rejeitada) em uma linha
+separada no arquivo de saída.
+Lembre-se de que este código é apenas um exemplo e pode ser adaptado para atender a
+requisitos específicos do problema em questão.
